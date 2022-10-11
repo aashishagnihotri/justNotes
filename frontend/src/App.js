@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Header from "./components/header/header";
 import { Modal } from "@mui/material";
 const notes = [
   {
@@ -48,24 +49,7 @@ const App = () => {
   };
   return (
     <>
-      <div>
-        <h1>Notes</h1>
-        <span>
-          <input
-            style={{
-              width: "100%",
-              height: "32px",
-              border: "0px solid white",
-            }}
-            type="text"
-            id="searchBar"
-            placeholder="Search Notes"
-            onChange={(e) => {
-              handleSearch(e.target.value);
-            }}
-          />
-        </span>
-      </div>
+      <Header />
       <hr style={{ borderBottom: "4px solid black", width: "100%" }} />
       <div
         style={{
@@ -87,7 +71,6 @@ const App = () => {
                   padding: "8px",
                   width: "300px",
                   height: "225px",
-                  // margin: "16px",
                   backgroundColor: "#F3E779",
                   borderRadius: "4px",
                 }}
