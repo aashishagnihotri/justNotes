@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Divider, Grid } from "@mui/material";
+import { Modal } from "@mui/material";
 const notes = [
   {
     id: 1,
@@ -66,8 +66,15 @@ const App = () => {
           />
         </span>
       </div>
-      <Divider orientation="horizontal" variant="fullWidth" />
-      <Grid container={true}>
+      <hr style={{ borderBottom: "4px solid black", width: "100%" }} />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "10px",
+          rowGap: "16px",
+        }}
+      >
         {noteList
           .filter((note) => {
             return note.note.toLowerCase().includes(search.toLowerCase());
@@ -80,7 +87,7 @@ const App = () => {
                   padding: "8px",
                   width: "300px",
                   height: "225px",
-                  margin: "16px",
+                  // margin: "16px",
                   backgroundColor: "#F3E779",
                   borderRadius: "4px",
                 }}
@@ -94,7 +101,7 @@ const App = () => {
               </div>
             );
           })}
-      </Grid>
+      </div>
       <Modal
         open={openNote}
         onClose={() => {
@@ -102,7 +109,7 @@ const App = () => {
           handleSave(currentNote);
         }}
         children={
-          <input
+          <textarea
             style={{
               margin: "75px",
               height: "300px",
@@ -111,13 +118,13 @@ const App = () => {
               backgroundColor: "#F3E779",
               display: "flex",
               flexDirection: "row",
-              alignItems: "flex-start",
+              alignItems: "start",
               justifyContent: "flex-start",
             }}
-            defaultValue={currentNote.note}
             onChange={(e) => {
               setCurrentNote({ ...currentNote, note: e.target.value });
             }}
+            defaultValue={currentNote.note}
           />
         }
       ></Modal>
