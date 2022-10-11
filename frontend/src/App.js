@@ -1,16 +1,5 @@
 import React, { useState } from "react";
-import {
-  Paper,
-  Box,
-  IconButton,
-  InputBase,
-  TextField,
-  Modal,
-  Divider,
-  Grid,
-  Input,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Modal, Divider, Grid } from "@mui/material";
 const notes = [
   {
     id: 1,
@@ -59,17 +48,15 @@ const App = () => {
   };
   return (
     <>
-      <h1>Notes</h1>
-      <Paper elevation={2}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Input
-            fullWidth
+      <div>
+        <h1>Notes</h1>
+        <span>
+          <input
+            style={{
+              width: "100%",
+              height: "32px",
+              border: "0px solid white",
+            }}
             type="text"
             id="searchBar"
             placeholder="Search Notes"
@@ -77,63 +64,63 @@ const App = () => {
               handleSearch(e.target.value);
             }}
           />
-          <IconButton type="button" aria-label="search">
-            <SearchIcon />
-          </IconButton>
-        </Box>
-        <Divider orientation="horizontal" variant="fullWidth" />
-        <Grid container={true}>
-          {noteList
-            .filter((note) => {
-              return note.note.toLowerCase().includes(search.toLowerCase());
-            })
-            .map((note) => {
-              return (
-                <Paper
-                  key={note.id}
-                  elevation={4}
-                  sx={{
-                    padding: "8px",
-                    width: "300px",
-                    height: "225px",
-                    margin: "16px",
-                    backgroundColor: "#F3E779",
-                  }}
-                  onClick={() => {
-                    setOpenNote(true);
-                    setCurrentNote(note);
-                  }}
-                >
-                  {note.note}
-                </Paper>
-              );
-            })}
-        </Grid>
-        <Modal
-          open={openNote}
-          onClose={() => {
-            setOpenNote(false);
-            handleSave(currentNote);
-          }}
-        >
-          <Box
-            sx={{
+        </span>
+      </div>
+      <Divider orientation="horizontal" variant="fullWidth" />
+      <Grid container={true}>
+        {noteList
+          .filter((note) => {
+            return note.note.toLowerCase().includes(search.toLowerCase());
+          })
+          .map((note) => {
+            return (
+              <div
+                style={{
+                  boxShadow: "2.5px 5px 5px black",
+                  padding: "8px",
+                  width: "300px",
+                  height: "225px",
+                  margin: "16px",
+                  backgroundColor: "#F3E779",
+                  borderRadius: "4px",
+                }}
+                key={note.id}
+                onClick={() => {
+                  setOpenNote(true);
+                  setCurrentNote(note);
+                }}
+              >
+                {note.note}
+              </div>
+            );
+          })}
+      </Grid>
+      <Modal
+        open={openNote}
+        onClose={() => {
+          setOpenNote(false);
+          handleSave(currentNote);
+        }}
+        children={
+          <input
+            style={{
               margin: "75px",
               height: "300px",
               width: "80%",
               padding: "32px",
               backgroundColor: "#F3E779",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
             }}
-          >
-            <InputBase
-              defaultValue={currentNote.note}
-              onChange={(e) => {
-                setCurrentNote({ ...currentNote, note: e.target.value });
-              }}
-            />
-          </Box>
-        </Modal>
-      </Paper>
+            defaultValue={currentNote.note}
+            onChange={(e) => {
+              setCurrentNote({ ...currentNote, note: e.target.value });
+            }}
+          />
+        }
+      ></Modal>
     </>
   );
 };
