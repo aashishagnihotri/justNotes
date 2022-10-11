@@ -37,11 +37,26 @@ const notes = [
 
 const App = () => {
   const [openNote, setOpenNote] = useState(false);
+  const [search, setSearch] = useState("");
   const [noteList, setNoteList] = useState(notes);
   const [currentNote, setCurrentNote] = useState({
     id: null,
     note: "",
   });
+
+  const handleSearch = (searchValue) => {
+    setSearch(searchValue);
+  };
+  const handleSave = (currentNote) => {
+    setNoteList(
+      noteList.map((note) => {
+        if (note.id === currentNote.id) {
+          return { ...note, note: currentNote.note };
+        }
+        return note;
+      })
+    );
+  };
   return (
     <>
       <h1>Notes</h1>
@@ -59,7 +74,7 @@ const App = () => {
             id="searchBar"
             placeholder="Search Notes"
             onChange={(e) => {
-              console.log("target value: ", e.target.value);
+              handleSearch(e.target.value);
             }}
           />
           <IconButton type="button" aria-label="search">
@@ -67,43 +82,55 @@ const App = () => {
           </IconButton>
         </Box>
         <Divider orientation="horizontal" variant="fullWidth" />
-        <Grid column={4} container={true}>
-          {noteList.map((note) => {
-            return (
-              <Paper
-                key={note.id}
-                elevation={4}
-                sx={{
-                  width: "300px",
-                  height: "225px",
-                  margin: "16px",
-                  backgroundColor: "#F3E779",
-                }}
-                onClick={() => {
-                  setOpenNote(true);
-                  setCurrentNote(note);
-                }}
-              >
-                {note.note}
-              </Paper>
-            );
-          })}
+        <Grid container={true}>
+          {noteList
+            .filter((note) => {
+              return note.note.toLowerCase().includes(search.toLowerCase());
+            })
+            .map((note) => {
+              return (
+                <Paper
+                  key={note.id}
+                  elevation={4}
+                  sx={{
+                    padding: "8px",
+                    width: "300px",
+                    height: "225px",
+                    margin: "16px",
+                    backgroundColor: "#F3E779",
+                  }}
+                  onClick={() => {
+                    setOpenNote(true);
+                    setCurrentNote(note);
+                  }}
+                >
+                  {note.note}
+                </Paper>
+              );
+            })}
         </Grid>
         <Modal
           open={openNote}
           onClose={() => {
             setOpenNote(false);
+            handleSave(currentNote);
           }}
         >
           <Box
             sx={{
               margin: "75px",
               height: "300px",
-              width: "90%",
+              width: "80%",
+              padding: "32px",
               backgroundColor: "#F3E779",
             }}
           >
-            {currentNote.note}
+            <InputBase
+              defaultValue={currentNote.note}
+              onChange={(e) => {
+                setCurrentNote({ ...currentNote, note: e.target.value });
+              }}
+            />
           </Box>
         </Modal>
       </Paper>
