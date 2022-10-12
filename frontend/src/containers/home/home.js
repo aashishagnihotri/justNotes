@@ -35,6 +35,8 @@ const Home = () => {
   const [currentNote, setCurrentNote] = useState({});
   const dispatch = useDispatch();
   const getNotes = useSelector((state) => state.notes.notes);
+  const isLoading = useSelector((state) => state.isLoading);
+  console.log("isLoading: ", isLoading);
   const handleSearch = (searchValue) => {
     setSearch(searchValue);
   };
@@ -54,25 +56,31 @@ const Home = () => {
             rowGap: "16px",
           }}
         >
-          {getNotes
-            .filter((note) => {
-              return note.note.toLowerCase().includes(search.toLowerCase());
-            })
-            .map((note) => {
-              return (
-                <div key={note.id}>
-                  <Card
-                    id={note.id}
-                    note={note.note}
-                    setOpenNote={setIsOpen}
-                    setCurrentNote={setCurrentNote}
-                  />
-                </div>
-              );
-            })}
+          {getNotes.filter((note) => {
+            return note.note.toLowerCase().includes(search.toLowerCase());
+          }).length > 0 ? (
+            getNotes
+              .filter((note) => {
+                return note.note.toLowerCase().includes(search.toLowerCase());
+              })
+              .map((note) => {
+                return (
+                  <div key={note.id}>
+                    <Card
+                      id={note.id}
+                      note={note.note}
+                      setOpenNote={setIsOpen}
+                      setCurrentNote={setCurrentNote}
+                    />
+                  </div>
+                );
+              })
+          ) : (
+            <h1>No Notes Found...</h1>
+          )}
         </div>
       ) : (
-        "Loading..."
+        <h1>Loading...</h1>
       )}
       <NoteModal
         id={currentNote.id}
