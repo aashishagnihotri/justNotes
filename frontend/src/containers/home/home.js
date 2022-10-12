@@ -79,6 +79,7 @@ const Home = () => {
         note={currentNote.note}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        isNew={false}
       />
     </>
   );

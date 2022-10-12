@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal } from "@mui/material";
-import { updateNote } from "../../redux/notes/reducer";
+import { addNote, updateNote } from "../../redux/notes/reducer";
 
-const NoteModal = ({ id, note, isOpen, setIsOpen }) => {
+const NoteModal = ({ id, note, isOpen, setIsOpen, isNew }) => {
   const dispatch = useDispatch();
   const [openNote, setOpenNote] = useState({
     id: id,
@@ -17,7 +17,11 @@ const NoteModal = ({ id, note, isOpen, setIsOpen }) => {
       <Modal
         open={isOpen}
         onClose={() => {
-          dispatch(updateNote({ id: openNote.id, note: openNote.note }));
+          if (isNew === true) {
+            dispatch(addNote({ id: openNote.id, note: openNote.note }));
+          } else {
+            dispatch(updateNote({ id: openNote.id, note: openNote.note }));
+          }
           setOpenNote({});
           setIsOpen(false);
         }}
