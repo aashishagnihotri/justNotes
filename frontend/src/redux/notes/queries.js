@@ -9,8 +9,6 @@ export const fetchNotesFromAPI = async () => {
     headers: {},
   })
     .then(function (response) {
-      const dispatch = useDispatch();
-      dispatch(setNotes(response.data));
       console.log(response.data);
       return response.data;
     })
