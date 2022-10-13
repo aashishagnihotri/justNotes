@@ -3,51 +3,38 @@ import Header from "../../components/header/header";
 import NoteModal from "../../components/modal/modal";
 import Card from "../../components/card/card";
 import { useSelector, useDispatch } from "react-redux";
-import { setNotes } from "../../redux/notes/reducer";
-
-const notes = [
-  {
-    id: 1,
-    note: "A quick and a brown fox",
-  },
-  {
-    id: 2,
-    note: "jumped over a lazy dog",
-  },
-
-  {
-    id: 3,
-    note: "note 3",
-  },
-  {
-    id: 4,
-    note: "note 4",
-  },
-  {
-    id: 5,
-    note: "note 5",
-  },
-];
+import {
+  fetchNotes,
+  getNotesStatus,
+  getNotesError,
+  getNotes,
+} from "../../redux/notes/reducer";
 
 const Home = () => {
+  const dispatch = useDispatch();
+
+  const notesList = useSelector(getNotes);
+  const checkNotesStatus = useSelector(getNotesStatus);
+  const checkNotesError = useSelector(getNotesError);
+
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [currentNote, setCurrentNote] = useState({});
-  const dispatch = useDispatch();
-  const getNotes = useSelector((state) => state.notes.notes);
-  const isLoading = useSelector((state) => state.isLoading);
-  console.log("isLoading: ", isLoading);
+
   const handleSearch = (searchValue) => {
     setSearch(searchValue);
   };
+
   useEffect(() => {
-    dispatch(setNotes(notes));
-  }, []);
+    if (checkNotesStatus === "idle") {
+      dispatch(fetchNotes());
+    }
+  }, [checkNotesStatus, dispatch]);
   return (
     <>
       <Header handleSearch={handleSearch} />
       <hr style={{ borderBottom: "4px solid black", width: "100%" }} />
-      {getNotes && getNotes.length > 0 ? (
+      {checkNotesStatus === "success" && notesList && notesList.length > 0 ? (
         <div
           style={{
             display: "grid",
@@ -56,10 +43,10 @@ const Home = () => {
             rowGap: "16px",
           }}
         >
-          {getNotes.filter((note) => {
+          {notesList.filter((note) => {
             return note.note.toLowerCase().includes(search.toLowerCase());
           }).length > 0 ? (
-            getNotes
+            notesList
               .filter((note) => {
                 return note.note.toLowerCase().includes(search.toLowerCase());
               })
@@ -79,9 +66,13 @@ const Home = () => {
             <h1>No Notes Found...</h1>
           )}
         </div>
-      ) : (
-        <h1>Loading...</h1>
-      )}
+      ) : checkNotesStatus === "loading" ? (
+        <div>
+          <h1>LOADING.....</h1>
+        </div>
+      ) : checkNotesStatus === "failed" ? (
+        <h1>{checkNotesError}</h1>
+      ) : null}
       <NoteModal
         id={currentNote.id}
         note={currentNote.note}

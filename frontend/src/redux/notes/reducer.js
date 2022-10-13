@@ -1,18 +1,32 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchNotesFromAPI } from "./queries";
+
+export const fetchNotes = createAsyncThunk("notes/fetchNotes", async () => {
+  try {
+    return await fetchNotesFromAPI()
+      .then((response) => {
+        return [...response];
+      })
+      .catch((err) => {
+        return err.message;
+      });
+  } catch (error) {
+    return error.message;
+  }
+});
 
 const noteSlice = createSlice({
   name: "notes",
   initialState: {
     notes: [],
-    // isLoading: true,
+    status: "idle", //  "idle" | "loading" | "success" | "failed"
+    error: null,
   },
 
   reducers: {
-    setNotes: (state, action) => {
-      state.notes = action.payload;
-      //      state.isLoading = false;
-    },
-    getNotes: (state) => state,
+    // setNotes: (state, action) => {
+    //   state.notes = action.payload;
+    // },
     addNote: (state, action) => {
       const newNote = {
         id: action.payload.id,
@@ -33,8 +47,27 @@ const noteSlice = createSlice({
       };
     },
   },
+
+  extraReducers(builder) {
+    builder
+      .addCase(fetchNotes.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchNotes.fulfilled, (state, action) => {
+        state.status = "success";
+        state.notes = action.payload;
+      })
+      .addCase(fetchNotes.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
+  },
 });
 
-export const { setNotes, getNotes, updateNote, addNote } = noteSlice.actions;
+export const getNotes = (state) => state.notes.notes;
+export const getNotesStatus = (state) => state.notes.status;
+export const getNotesError = (state) => state.notes.error;
+
+export const { setNotes, updateNote, addNote } = noteSlice.actions;
 
 export default noteSlice.reducer;
