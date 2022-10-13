@@ -3,9 +3,9 @@ import Home from "./containers/home/home";
 
 const App = () => {
   return (
-    <>
+    <div className="appContainer">
       <Home />
-    </>
+    </div>
   );
 };
 

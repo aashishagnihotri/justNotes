@@ -9,7 +9,7 @@ import {
   getNotesError,
   getNotes,
 } from "../../redux/notes/reducer";
-
+import styles from "./home.module.scss";
 const Home = () => {
   const dispatch = useDispatch();
 
@@ -33,16 +33,9 @@ const Home = () => {
   return (
     <>
       <Header handleSearch={handleSearch} />
-      <hr style={{ borderBottom: "4px solid black", width: "100%" }} />
+      <hr className={styles.divider} />
       {checkNotesStatus === "success" && notesList && notesList.length > 0 ? (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "10px",
-            rowGap: "16px",
-          }}
-        >
+        <div className={styles.noteContainer}>
           {notesList.filter((note) => {
             return note.note.toLowerCase().includes(search.toLowerCase());
           }).length > 0 ? (

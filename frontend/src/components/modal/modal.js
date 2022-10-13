@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal } from "@mui/material";
 import { addNote, updateNote } from "../../redux/notes/reducer";
+import styles from "./modal.module.scss";
 
 const NoteModal = ({ id, note, isOpen, setIsOpen, isNew }) => {
   const dispatch = useDispatch();
@@ -27,17 +28,7 @@ const NoteModal = ({ id, note, isOpen, setIsOpen, isNew }) => {
         }}
         children={
           <textarea
-            style={{
-              margin: "75px",
-              height: "300px",
-              width: "80%",
-              padding: "32px",
-              backgroundColor: "#F3E779",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "start",
-              justifyContent: "flex-start",
-            }}
+            className={styles.noteArea}
             onChange={(e) => {
               setOpenNote({ ...openNote, note: e.target.value });
             }}
