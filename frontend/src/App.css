@@ -3,5 +3,6 @@
 }
 
 .appContainer {
+  margin: 0;
   font-family: "Figtree", sans-serif;
 }
