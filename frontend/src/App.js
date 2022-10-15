@@ -1,18 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Home from "./containers/home/home";
 import Login from "./containers/login/login";
 
-// import { Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getLoginStatus } from "./redux/user/reducer";
 const App = () => {
-  const isLoggedIn = localStorage.getItem("isLogin");
+  const loginStatus = useSelector(getLoginStatus);
+
+  console.log("login status: ", loginStatus);
   return (
-    <div className="appContainer">
-      {isLoggedIn ? <Home /> : <Login />}
-      {/* <Routes>
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/home" element={<Home />} />
-      </Routes> */}
-    </div>
+    <div className="appContainer">{loginStatus ? <Home /> : <Login />}</div>
   );
 };
 

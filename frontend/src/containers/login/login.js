@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { loginAuth } from "../../redux/user/reducer";
 import styles from "./login.module.scss";
 
 const Login = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const dispatch = useDispatch();
+  const [user, setUser] = useState(null);
+  const { register, handleSubmit, watch, formState } = useForm();
 
   const onSubmit = (data) => {
-    if (data.username === "abc" && data.password === "123") {
-      localStorage.setItem("isLogin", true);
-    }
+    console.log(data, "onSubmit");
+    setUser(data);
   };
+
+  useEffect(() => {
+    if (user && Object.keys(user).length > 0) {
+      dispatch(loginAuth({ username: user.username, password: user.password }));
+      // dispatch(setLogin({ username: user.username, password: user.password }));
+    }
+  }, [user]);
+
   return (
     <div className={styles.container}>
       <div className={styles.imageContainer}></div>
