@@ -7,6 +7,7 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import LoginForm from "../../components/login/login";
 import SignUpForm from "../../components/signUp/signUp";
+import { Tooltip } from "@mui/material";
 
 const Start = () => {
   const dispatch = useDispatch();
@@ -28,9 +29,7 @@ const Start = () => {
   return (
     <div className={styles.container}>
       {onLogin ? (
-        <div className={styles.imageContainer}>
-          <h1> Image </h1>
-        </div>
+        <div className={styles.imageContainer}>Image</div>
       ) : (
         <div className={styles.loginContainer}>
           <SignUpForm setOnLogin={setOnLogin} onLogin={onLogin} s />
@@ -41,6 +40,11 @@ const Start = () => {
           className={styles.icon}
           onClick={() => {
             setOnLogin(!onLogin);
+          }}
+          onMouseOver={() => {
+            <Tooltip title="signup-cta">
+              <span>Click to Sign up</span>
+            </Tooltip>;
           }}
         >
           {onLogin ? <ArrowCircleLeftIcon /> : <ArrowCircleRightIcon />}
