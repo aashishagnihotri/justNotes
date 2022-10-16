@@ -1,6 +1,6 @@
 import React from "react";
 import Home from "./containers/home/home";
-import Login from "./containers/login/login";
+import Start from "./containers/start/start";
 
 import { useSelector } from "react-redux";
 import { getLoginStatus } from "./redux/user/reducer";
@@ -9,7 +9,7 @@ const App = () => {
 
   console.log("login status: ", loginStatus);
   return (
-    <div className="appContainer">{loginStatus ? <Home /> : <Login />}</div>
+    <div className="appContainer">{loginStatus ? <Home /> : <Start />}</div>
   );
 };
 
