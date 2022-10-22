@@ -8,6 +8,17 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import LoginForm from "../../components/login/login";
 import SignUpForm from "../../components/signUp/signUp";
 import { Tooltip } from "@mui/material";
+import HoverComponent from "../../components/hover/hover";
+
+const ClickToFlip = React.forwardRef((props, ref) => {
+  //  Spread the props to the underlying DOM element.
+  console.debug("tooltip content: ", props, ref);
+  return (
+    <div {...props} ref={ref}>
+      Click to Flip
+    </div>
+  );
+});
 
 const Start = () => {
   const dispatch = useDispatch();
@@ -41,13 +52,12 @@ const Start = () => {
           onClick={() => {
             setOnLogin(!onLogin);
           }}
-          onMouseOver={() => {
-            <Tooltip title="signup-cta">
-              <span>Click to Sign up</span>
-            </Tooltip>;
-          }}
         >
-          {onLogin ? <ArrowCircleLeftIcon /> : <ArrowCircleRightIcon />}
+          {onLogin ? (
+            <ArrowCircleLeftIcon className={styles.icon} />
+          ) : (
+            <ArrowCircleRightIcon className={styles.icon} />
+          )}
         </div>
       </div>
       {onLogin ? (

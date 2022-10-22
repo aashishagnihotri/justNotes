@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/header";
 import NoteModal from "../../components/modal/modal";
 import Card from "../../components/card/card";
+import NoNotes from "../../components/noNotes/noNotes";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchNotes,
@@ -10,6 +11,7 @@ import {
   getNotes,
 } from "../../redux/notes/reducer";
 import styles from "./home.module.scss";
+import { COLOR_CODES } from "../../helpers/helper";
 const Home = () => {
   const dispatch = useDispatch();
 
@@ -43,11 +45,12 @@ const Home = () => {
               .filter((note) => {
                 return note.note.toLowerCase().includes(search.toLowerCase());
               })
-              .map((note) => {
+              .map((note, index) => {
                 return (
                   <div key={note.id}>
                     <Card
                       id={note.id}
+                      color={COLOR_CODES[index % 4]}
                       note={note.note}
                       setOpenNote={setIsOpen}
                       setCurrentNote={setCurrentNote}
@@ -56,7 +59,11 @@ const Home = () => {
                 );
               })
           ) : (
-            <h1>No Notes Found...</h1>
+            <>
+              <div className={styles.noNote}>
+                0 Notes found for the current search
+              </div>
+            </>
           )}
         </div>
       ) : checkNotesStatus === "loading" ? (
@@ -65,6 +72,8 @@ const Home = () => {
         </div>
       ) : checkNotesStatus === "failed" ? (
         <h1>{checkNotesError}</h1>
+      ) : notesList.length < 1 ? (
+        <NoNotes />
       ) : null}
       <NoteModal
         id={currentNote.id}
