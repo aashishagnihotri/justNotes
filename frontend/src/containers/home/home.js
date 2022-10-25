@@ -26,12 +26,12 @@ const Home = () => {
   const handleSearch = (searchValue) => {
     setSearch(searchValue);
   };
-
   useEffect(() => {
+    console.log(checkNotesStatus);
     if (checkNotesStatus === "idle") {
       dispatch(fetchNotes());
     }
-  }, [checkNotesStatus, dispatch]);
+  }, [checkNotesStatus, isOpen, dispatch]);
   return (
     <>
       <Header handleSearch={handleSearch} />

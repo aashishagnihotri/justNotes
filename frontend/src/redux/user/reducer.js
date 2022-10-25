@@ -7,7 +7,7 @@ export const loginAuth = createAsyncThunk(
   async ({ username, password }) => {
     return await axios({
       method: "post",
-      url: "http://localho.st:3001/users/login",
+      url: "http://localho.st:3005/users/login",
       data: {
         username: username,
         password: password,
@@ -35,7 +35,7 @@ const userSlice = createSlice({
   initialState: {
     isLoggedIn: false,
     user: {},
-    status: "idle", //  "idle" | "loading" | "success" | "failed"
+    userLoginStatus: "idle", //  "idle" | "loading" | "success" | "failed"
     error: null,
   },
   reducers: {
@@ -51,20 +51,20 @@ const userSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(loginAuth.pending, (state, action) => {
-        state.status = "loading";
+        state.userLoginStatus = "loading";
       })
       .addCase(loginAuth.fulfilled, (state, action) => {
         if (action.payload.status === "failed") {
           toast.error(`${action.payload.data}`);
         } else {
-          state.status = "success";
+          state.userLoginStatus = "success";
           action.payload.data === false
             ? toast.warning(`Incorrect Credentials. Please Try Again!`)
             : (state.isLoggedIn = action.payload.data);
         }
       })
       .addCase(loginAuth.rejected, (state, action) => {
-        state.status = "failed";
+        state.userLoginStatus = "failed";
         toast(`${action.error.message}`);
         state.error = action.error.message;
       });
