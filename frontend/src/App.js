@@ -4,12 +4,15 @@ import Start from "./containers/start/start";
 
 import { useSelector } from "react-redux";
 import { getLoginStatus } from "./redux/user/reducer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const App = () => {
   const loginStatus = useSelector(getLoginStatus);
-
-  console.log("login status: ", loginStatus);
   return (
-    <div className="appContainer">{loginStatus ? <Home /> : <Start />}</div>
+    <div className="appContainer">
+      {loginStatus ? <Home /> : <Start />}
+      <ToastContainer />
+    </div>
   );
 };
 

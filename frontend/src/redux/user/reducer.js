@@ -1,20 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { authenticateLogin } from "./queries";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export const loginAuth = createAsyncThunk(
   "user/authenticateUser",
   async ({ username, password }) => {
-    try {
-      return await authenticateLogin({ username, password })
-        .then((response) => {
-          return response;
-        })
-        .catch((error) => {
-          return error;
-        });
-    } catch (err) {
-      return err.message;
-    }
+    return await axios({
+      method: "post",
+      url: "http://localho.st:3001/users/login",
+      data: {
+        username: username,
+        password: password,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return {
+          data: response.data,
+          status: response.status,
+        };
+      })
+      .catch((error) => {
+        return {
+          status: "failed",
+          data: error.message,
+        };
+      });
   }
 );
 const userSlice = createSlice({
@@ -41,12 +54,18 @@ const userSlice = createSlice({
         state.status = "loading";
       })
       .addCase(loginAuth.fulfilled, (state, action) => {
-        state.status = "success";
-        console.log("success: ", action.payload);
-        state.isLoggedIn = action.payload ? true : false;
+        if (action.payload.status === "failed") {
+          toast.error(`${action.payload.data}`);
+        } else {
+          state.status = "success";
+          action.payload.data === false
+            ? toast.warning(`Incorrect Credentials. Please Try Again!`)
+            : (state.isLoggedIn = action.payload.data);
+        }
       })
       .addCase(loginAuth.rejected, (state, action) => {
         state.status = "failed";
+        toast(`${action.error.message}`);
         state.error = action.error.message;
       });
   },

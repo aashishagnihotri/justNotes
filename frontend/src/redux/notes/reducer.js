@@ -1,16 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchNotesFromAPI } from "./queries";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export const fetchNotes = createAsyncThunk("notes/fetchNotes", async () => {
   try {
-    return await fetchNotesFromAPI()
-      .then((response) => {
-        return [...response];
+    return await axios({
+      method: "get",
+      url: "http://localho.st:3001/notes",
+      headers: {},
+    })
+      .then(async function (response) {
+        return { data: response.data, status: response.status };
       })
-      .catch((err) => {
-        return err.message;
+      .catch(function (error) {
+        return { data: error.message, status: "failed" };
       });
   } catch (error) {
+    toast.error("Some Error Occured. Please Try Again Later");
     return error.message;
   }
 });
@@ -54,12 +60,17 @@ const noteSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchNotes.fulfilled, (state, action) => {
-        state.status = "success";
-        state.notes = action.payload;
+        if (action.payload.status === "failed") {
+          toast(`${action.payload.data}`);
+        } else {
+          state.status = "success";
+          state.notes = action.payload;
+        }
       })
       .addCase(fetchNotes.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+        toast(`${action.error.message}`);
       });
   },
 });
