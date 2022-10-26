@@ -1,16 +1,18 @@
-const { MongoClient } = require("mongodb");
+var MongoClient = require("mongodb");
+require("dotenv").config();
+console.log(process.env.DB_URL);
+var url = process.env.DB_URL; // "mongodb://localhost:27017";
 
-const url = process.env.DB_PORT; // "mongodb://localhost:27017";
-const client = new MongoClient(url);
+var client = new MongoClient.MongoClient(url);
 
-const dbName = process.env.DB_NAME;
+var dbName = process.env.DB_NAME;
 
-const main = async () => {
+var main = async () => {
   await client.connect();
   console.log(`Successfully Connected to ${url}`);
-  const db = client.db(dbName);
+  var db = client.db(dbName);
   console.log(`Connected to ${dbName}`);
   return db;
 };
 
-export default main;
+module.exports = main;
