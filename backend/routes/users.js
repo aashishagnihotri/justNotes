@@ -1,26 +1,38 @@
 var express = require("express");
 var router = express.Router();
-var login = require("../controllers/userControllers");
-// import { login } from "../controllers/userControllers";
+var userController = require("../controllers/userControllers");
 
 /* GET users listing. */
 router.post("/login", function (req, res, next) {
-  return login({ id: req.body.username, password: req.body.password })
+  return userController
+    .login({ email: req.body.username, password: req.body.password })
     .then((response) => {
-      console.log("response on routes: ", response);
       res.send(response);
     })
     .catch((err) => {
-      console.log("err in routes: ", err);
-      return err;
+      res.send({
+        status: 500,
+        message: err.message,
+      });
     });
-  // if (req.body.username === "aashish" && req.body.password === "test1234") {
-  //   res.setHeader("Access-Control-Allow-Origin", "*");
-  //   res.send(true);
-  // } else {
-  //   res.setHeader("Access-Control-Allow-Origin", "*");
-  //   res.send(false);
-  // }
+});
+
+router.post("/add", (req, res, next) => {
+  return userController
+    .addUser({
+      name: req.body.name,
+      password: req.body.password,
+      email: req.body.email,
+    })
+    .then((response) => {
+      res.json(response).status(response.status);
+    })
+    .catch((error) => {
+      return {
+        status: 500,
+        message: error.message,
+      };
+    });
 });
 
 module.exports = router;

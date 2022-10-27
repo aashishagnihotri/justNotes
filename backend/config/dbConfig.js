@@ -7,7 +7,7 @@ var client = new MongoClient.MongoClient(url);
 
 var dbName = process.env.DB_NAME;
 
-var main = async () => {
+var connectToDB = async () => {
   await client.connect();
   console.log(`Successfully Connected to ${url}`);
   var db = client.db(dbName);
@@ -15,4 +15,9 @@ var main = async () => {
   return db;
 };
 
-module.exports = main;
+var closeConnect = async () => {
+  await client.close();
+  console.log("Connection Closed");
+};
+
+module.exports = { connectToDB, closeConnect };
