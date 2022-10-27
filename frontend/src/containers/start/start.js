@@ -1,35 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { loginAuth } from "../../redux/user/reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { getSignUpStatus, loginAuth } from "../../redux/user/reducer";
 import styles from "./start.module.scss";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import LoginForm from "../../components/login/login";
 import SignUpForm from "../../components/signUp/signUp";
-import { Tooltip } from "@mui/material";
-import HoverComponent from "../../components/hover/hover";
+// import { Tooltip } from "@mui/material";
+// import HoverComponent from "../../components/hover/hover";
 
-const ClickToFlip = React.forwardRef((props, ref) => {
-  //  Spread the props to the underlying DOM element.
-  console.debug("tooltip content: ", props, ref);
-  return (
-    <div {...props} ref={ref}>
-      Click to Flip
-    </div>
-  );
-});
+// const ClickToFlip = React.forwardRef((props, ref) => {
+//   //  Spread the props to the underlying DOM element.
+//   console.debug("tooltip content: ", props, ref);
+//   return (
+//     <div {...props} ref={ref}>
+//       Click to Flip
+//     </div>
+//   );
+// });
 
 const Start = () => {
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [onLogin, setOnLogin] = useState(true);
-  const { register, handleSubmit, watch, formState } = useForm();
-
-  const onSubmit = (data) => {
-    console.log(data, "onSubmit");
-    setUser(data);
-  };
+  const signUpStatus = useSelector(getSignUpStatus);
 
   useEffect(() => {
     if (user && Object.keys(user).length > 0) {
@@ -37,6 +32,12 @@ const Start = () => {
       // dispatch(setLogin({ username: user.username, password: user.password }));
     }
   }, [user]);
+
+  useEffect(() => {
+    if (signUpStatus === "success") {
+      setOnLogin(true);
+    }
+  }, [signUpStatus]);
   return (
     <div className={styles.container}>
       {onLogin ? (

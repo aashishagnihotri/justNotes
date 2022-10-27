@@ -1,13 +1,17 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import styles from "./signUp.module.scss";
+import { useDispatch } from "react-redux";
+import { signUp } from "../../redux/user/reducer";
 
 const SignUpForm = ({ setOnLogin, onLogin }) => {
   const { handleSubmit, register } = useForm();
-
+  const dispatch = useDispatch();
   const onSubmit = (data) => {
     console.log(data);
-    setOnLogin(!onLogin);
+    dispatch(
+      signUp({ name: data.name, email: data.email, password: data.password })
+    );
   };
 
   return (
@@ -16,10 +20,10 @@ const SignUpForm = ({ setOnLogin, onLogin }) => {
         <div>
           <input
             className={styles.inputArea}
-            id="username"
-            type="username"
-            placeholder="Enter Username"
-            {...register("username")}
+            id="name"
+            type="name"
+            placeholder="Enter Your Name"
+            {...register("name")}
           />
         </div>
         <div>
@@ -28,7 +32,7 @@ const SignUpForm = ({ setOnLogin, onLogin }) => {
             id="email"
             type="email"
             placeholder="Enter Email Id"
-            {...register("emailId")}
+            {...register("email")}
           />
         </div>
         <div>
