@@ -30,7 +30,7 @@ const Header = ({ handleSearch }) => {
         />
       </span>
       <NoteModal
-        id={new Date().getTime()}
+        noteId={""}
         note={""}
         setIsOpen={setIsOpen}
         isOpen={isOpen}

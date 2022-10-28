@@ -15,6 +15,7 @@ var generateToken = async function ({ userId }) {
     }
   );
   const response = {
+    userId: userId,
     token: token,
     refreshToken: refreshToken,
     status: "Logged-In",

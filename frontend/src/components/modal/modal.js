@@ -4,24 +4,32 @@ import { Modal } from "@mui/material";
 import { addNote, editNote } from "../../redux/notes/reducer";
 import styles from "./modal.module.scss";
 
-const NoteModal = ({ id, note, isOpen, setIsOpen, isNew }) => {
+const NoteModal = ({ noteId, note, isOpen, setIsOpen, isNew }) => {
   const dispatch = useDispatch();
   const [openNote, setOpenNote] = useState({
-    id: id,
+    noteId: noteId,
     note: note,
   });
+  console.log("note in modal: ", { noteId: noteId, note: note });
+  const userId = localStorage.getItem("userId");
   useEffect(() => {
-    setOpenNote({ id: id, note: note });
-  }, [id, note]);
+    setOpenNote({ noteId: noteId, note: note });
+  }, [noteId, note]);
   return (
     <>
       <Modal
         open={isOpen}
         onClose={() => {
           if (isNew === true) {
-            dispatch(addNote({ id: openNote.id, note: openNote.note }));
+            dispatch(addNote({ userId: userId, note: openNote.note }));
           } else {
-            dispatch(editNote({ id: openNote.id, note: openNote.note }));
+            dispatch(
+              editNote({
+                userId: userId,
+                noteId: openNote.noteId,
+                note: openNote.note,
+              })
+            );
           }
           setOpenNote({});
           setIsOpen(false);

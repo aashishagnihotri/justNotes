@@ -2,34 +2,38 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export const fetchNotes = createAsyncThunk("notes/fetchNotes", async () => {
-  try {
-    return await axios({
-      method: "get",
-      url: "http://localho.st:3005/notes",
-      headers: {},
-    })
-      .then(function (response) {
-        return { data: response.data, status: response.status };
+export const fetchNotes = createAsyncThunk(
+  "notes/fetchNotes",
+  async ({ userId }) => {
+    try {
+      return await axios({
+        method: "get",
+        url: "http://localho.st:3005/notes/get",
+        params: { userId: userId },
+        headers: {},
       })
-      .catch(function (error) {
-        return { data: error.message, status: "failed" };
-      });
-  } catch (error) {
-    toast.error("Some Error Occured. Please Try Again Later");
-    return error.message;
+        .then(function (response) {
+          return { data: response.data, status: response.status };
+        })
+        .catch(function (error) {
+          return { data: error.message, status: "failed" };
+        });
+    } catch (error) {
+      toast.error("Some Error Occured. Please Try Again Later");
+      return error.message;
+    }
   }
-});
+);
 
 export const addNote = createAsyncThunk(
   "notes/addNote",
-  async ({ id, note }) => {
+  async ({ userId, note }) => {
     try {
       return await axios({
         method: "post",
         url: "http://localho.st:3005/notes/add",
         data: {
-          id: id,
+          userId: userId,
           note: note,
         },
         headers: {
@@ -57,13 +61,14 @@ export const addNote = createAsyncThunk(
 
 export const editNote = createAsyncThunk(
   "notes/editNote",
-  async ({ id, note }) => {
+  async ({ userId, noteId, note }) => {
     try {
       return await axios({
         method: "post",
         url: "http://localho.st:3005/notes/edit",
         data: {
-          id: id,
+          userId: userId,
+          noteId: noteId,
           note: note,
         },
         headers: {
@@ -140,7 +145,7 @@ const noteSlice = createSlice({
         } else {
           console.log("there");
           state.fetchNotesStatus = "success";
-          state.notes = action.payload.data;
+          state.notes = action.payload.data.notes;
         }
       })
       .addCase(fetchNotes.rejected, (state, action) => {
@@ -152,13 +157,13 @@ const noteSlice = createSlice({
         state.addNotesStatus = "loading";
       })
       .addCase(addNote.fulfilled, (state, action) => {
-        if (action.payload.status === "failed") {
+        if (action.payload.data.status === 500) {
           state.addNotesStatus = "failed";
           state.addNotesError = action.payload.data;
           toast.error(`${action.payload.data}`);
         } else {
           state.addNotesStatus = "success";
-          toast.success(`${action.payload.data}`);
+          toast.success(`${action.payload.data.message}`);
         }
       })
       .addCase(addNote.rejected, (state, action) => {
@@ -170,13 +175,13 @@ const noteSlice = createSlice({
         state.editNotesStatus = "loading";
       })
       .addCase(editNote.fulfilled, (state, action) => {
-        if (action.payload.status === "failed") {
+        if (action.payload.data.status === 500) {
           state.editNotesStatus = "failed";
           state.editNotesError = action.payload.message;
-          toast.error(`${action.payload.data}`);
+          toast.error(`${action.payload.data.message}`);
         } else {
           state.editNotesStatus = "success";
-          toast.success(`${action.payload.data}`);
+          toast.success(`${action.payload.data.message}`);
         }
       })
       .addCase(editNote.rejected, (state, action) => {
@@ -190,6 +195,8 @@ const noteSlice = createSlice({
 export const getNotes = (state) => state.notes.notes;
 export const getNotesStatus = (state) => state.notes.fetchNotesStatus;
 export const getNotesError = (state) => state.notes.fetchNotesError;
+export const addNotesStatus = (state) => state.notes.addNotesStatus;
+export const editNotesStatus = (state) => state.notes.editNotesStatus;
 
 export const { setNotes, updateNote } = noteSlice.actions;
 

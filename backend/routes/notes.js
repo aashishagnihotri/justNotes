@@ -1,48 +1,76 @@
 const express = require("express");
 const router = express.Router();
+var notesController = require("../controllers/notesController");
 
-let notes = [
-  {
-    id: 1,
-    note: "note 1",
-  },
-  {
-    id: 2,
-    note: "note 2",
-  },
-
-  {
-    id: 3,
-    note: "note 3",
-  },
-  {
-    id: 4,
-    note: "note 4",
-  },
-  {
-    id: 5,
-    note: "note 5",
-  },
-];
-
-router.get("/", (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  return res.send(notes);
+router.get("/get", (req, res, next) => {
+  const userId = req.query.userId;
+  console.log("userId: ", userId);
+  return notesController
+    .fetchNotes(userId)
+    .then((notes) => {
+      return res.send(notes);
+    })
+    .catch((err) => {
+      return res.send({
+        status: 500,
+        message: err.message,
+      });
+    });
 });
 
 router.post("/add", (req, res, next) => {
-  notes.push({ id: req.body.id, note: req.body.note });
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.send({ data: "Note Added" });
+  const { userId, note } = req.body;
+  return notesController
+    .addNote({ userId, note })
+    .then((response) => {
+      if (response.status === 200) {
+        res.send({
+          status: 200,
+          message: response.message,
+        });
+      } else {
+        res.send({
+          status: 500,
+          message: response.message,
+        });
+      }
+    })
+    .catch((error) => {
+      return {
+        status: 500,
+        message: error.message,
+      };
+    });
 });
 
 router.post("/edit", (req, res, next) => {
-  notes.map((note) => {
-    if (note.id === req.body.id) {
-      note.note = req.body.note;
-    }
-  });
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.send({ data: "Note Updated" });
+  const { userId, noteId, note } = req.body;
+  return notesController
+    .editNote({ userId: userId, noteId: noteId, newNote: note })
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((error) => {
+      return {
+        status: 500,
+        message: error.message,
+      };
+    });
 });
+
+router.post("/delete", (req, res, next) => {
+  const { noteId } = req.body;
+  return notesController
+    .deleteNote({ noteId: noteId })
+    .then((response) => {
+      return res.send(response);
+    })
+    .catch((error) => {
+      return {
+        status: 500,
+        message: error.message,
+      };
+    });
+});
+
 module.exports = router;

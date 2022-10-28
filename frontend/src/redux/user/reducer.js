@@ -84,6 +84,7 @@ const userSlice = createSlice({
             "refreshToken",
             action.payload.data.refreshToken
           );
+          localStorage.setItem("userId", action.payload.data.userId);
           state.userLoginStatus = "success";
           toast.success("Welcome!");
         } else {

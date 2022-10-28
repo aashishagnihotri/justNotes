@@ -9,6 +9,8 @@ import {
   getNotesStatus,
   getNotesError,
   getNotes,
+  addNotesStatus,
+  editNotesStatus,
 } from "../../redux/notes/reducer";
 import styles from "./home.module.scss";
 import { COLOR_CODES } from "../../helpers/helper";
@@ -18,7 +20,6 @@ const Home = () => {
   const notesList = useSelector(getNotes);
   const checkNotesStatus = useSelector(getNotesStatus);
   const checkNotesError = useSelector(getNotesError);
-
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [currentNote, setCurrentNote] = useState({});
@@ -27,11 +28,11 @@ const Home = () => {
     setSearch(searchValue);
   };
   useEffect(() => {
-    console.log(checkNotesStatus);
-    if (checkNotesStatus === "idle") {
-      dispatch(fetchNotes());
+    if (checkNotesStatus === "idle" && localStorage.getItem("userId")) {
+      dispatch(fetchNotes({ userId: localStorage.getItem("userId") }));
     }
-  }, [checkNotesStatus, isOpen, dispatch]);
+  }, [checkNotesStatus, dispatch]);
+  console.log("note: ", currentNote);
   return (
     <>
       <Header handleSearch={handleSearch} />
@@ -47,9 +48,9 @@ const Home = () => {
               })
               .map((note, index) => {
                 return (
-                  <div key={note.id}>
+                  <div key={note.noteId}>
                     <Card
-                      id={note.id}
+                      noteId={note.noteId}
                       color={COLOR_CODES[index % 4]}
                       note={note.note}
                       setOpenNote={setIsOpen}
@@ -76,7 +77,7 @@ const Home = () => {
         <NoNotes />
       ) : null}
       <NoteModal
-        id={currentNote.id}
+        noteId={currentNote.noteId}
         note={currentNote.note}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
