@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { CircularProgress, Backdrop } from "@mui/material";
 import Header from "../../components/header/header";
 import NoteModal from "../../components/modal/modal";
 import Card from "../../components/card/card";
@@ -9,8 +10,6 @@ import {
   getNotesStatus,
   getNotesError,
   getNotes,
-  addNotesStatus,
-  editNotesStatus,
 } from "../../redux/notes/reducer";
 import styles from "./home.module.scss";
 import { COLOR_CODES } from "../../helpers/helper";
@@ -68,9 +67,12 @@ const Home = () => {
           )}
         </div>
       ) : checkNotesStatus === "loading" ? (
-        <div>
-          <h1>LOADING.....</h1>
-        </div>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={checkNotesStatus === "loading" ? true : false}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       ) : checkNotesStatus === "failed" ? (
         <h1>{checkNotesError}</h1>
       ) : notesList.length < 1 ? (

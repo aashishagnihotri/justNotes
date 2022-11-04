@@ -3,6 +3,7 @@ const router = express.Router();
 var notesController = require("../controllers/notesController");
 
 router.get("/get", (req, res, next) => {
+  console.log("cookie: ", req.headers);
   const userId = req.query.userId;
   console.log("userId: ", userId);
   return notesController

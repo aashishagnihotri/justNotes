@@ -39,6 +39,7 @@ export const addNote = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        withCredentials: true,
       })
         .then((response) => {
           return {
