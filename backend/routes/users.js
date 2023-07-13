@@ -7,7 +7,11 @@ router.post("/login", function (req, res, next) {
   return userController
     .login({ email: req.body.username, password: req.body.password })
     .then((response) => {
-      res.cookie("token", response.token, { httpOnly: true, secure: true });
+      res.cookie("token", response.token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 20000,
+      });
       res.send(response);
     })
     .catch((err) => {

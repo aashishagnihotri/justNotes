@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { refreshPage } from "../../helpers/helper";
 
 export const loginAuth = createAsyncThunk(
   "user/authenticateUser",
@@ -85,8 +86,9 @@ const userSlice = createSlice({
             action.payload.data.refreshToken
           );
           localStorage.setItem("userId", action.payload.data.userId);
-          state.userLoginStatus = "success";
           toast.success("Welcome!");
+          state.userLoginStatus = "success";
+          refreshPage();
         } else {
           state.userLoginStatus = "failed";
           toast.error(`${action.payload.data.message}`);

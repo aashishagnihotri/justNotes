@@ -5,3 +5,7 @@ export const COLOR_CODES = [
   "#feff9c",
   "#fff740",
 ];
+
+export const refreshPage = () => {
+  return window.location.reload;
+};

@@ -9,14 +9,39 @@ const Header = ({ handleSearch }) => {
     <>
       <div className={styles.headerContainer}>
         <h1>Notes</h1>
-        <button
-          className={styles.addNote}
-          onClick={() => {
-            setIsOpen(true);
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <AddIcon fontSize="large" />
-        </button>
+          <button
+            style={{
+              margin: "4px",
+              padding: "0.25rem",
+              backgroundColor: "maroon",
+              color: "white",
+              borderRadius: "4px",
+              border: "2px solid black",
+            }}
+            onClick={() => {
+              alert("Logging Out...");
+              localStorage.removeItem("accessToken");
+              window.location.reload(true);
+            }}
+          >
+            Logout
+          </button>
+          <button
+            className={styles.addNote}
+            onClick={() => {
+              setIsOpen(true);
+            }}
+          >
+            <AddIcon fontSize="large" />
+          </button>
+        </div>
       </div>
       <span>
         <input
