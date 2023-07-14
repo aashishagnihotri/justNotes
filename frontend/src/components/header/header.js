@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import NoteModal from "../modal/modal";
 import AddIcon from "@mui/icons-material/Add";
 import styles from "./header.module.scss";
+import logo from "../../../public/svg/logo-no-background.svg";
 
 const Header = ({ handleSearch }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <div className={styles.headerContainer}>
-        <h1>Notes</h1>
+        <img
+          style={{ height: "40px", width: "50px" }}
+          src={logo}
+          alt="header-logo"
+        />
         <div
           style={{
             display: "flex",

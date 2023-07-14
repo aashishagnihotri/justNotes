@@ -50,7 +50,7 @@ const Home = () => {
                   <div key={note.noteId}>
                     <Card
                       noteId={note.noteId}
-                      color={COLOR_CODES[index % 4]}
+                      color={COLOR_CODES[index % 2]}
                       note={note.note}
                       setOpenNote={setIsOpen}
                       setCurrentNote={setCurrentNote}

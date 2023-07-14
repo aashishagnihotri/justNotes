@@ -7,6 +7,7 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import LoginForm from "../../components/login/login";
 import SignUpForm from "../../components/signUp/signUp";
+import logo from "../../../public/svg/logo-color.svg";
 // import { Tooltip } from "@mui/material";
 // import HoverComponent from "../../components/hover/hover";
 
@@ -41,7 +42,13 @@ const Start = () => {
   return (
     <div className={styles.container}>
       {onLogin ? (
-        <div className={styles.imageContainer}>Image</div>
+        <div className={styles.imageContainer}>
+          <img
+            style={{ height: "300px", width: "300px" }}
+            src={logo}
+            alt="logo"
+          />
+        </div>
       ) : (
         <div className={styles.loginContainer}>
           <SignUpForm setOnLogin={setOnLogin} onLogin={onLogin} s />
@@ -67,7 +74,11 @@ const Start = () => {
         </div>
       ) : (
         <div className={styles.imageContainer}>
-          <h1> Image </h1>
+          <img
+            style={{ height: "300px", width: "300px" }}
+            src={logo}
+            alt="logo"
+          />
         </div>
       )}
     </div>
