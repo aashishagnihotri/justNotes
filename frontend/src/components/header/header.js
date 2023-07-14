@@ -34,6 +34,7 @@ const Header = ({ handleSearch }) => {
             }}
             onClick={() => {
               alert("Logging Out...");
+              localStorage.clear();
               dispatch(setLogout(false));
             }}
           >

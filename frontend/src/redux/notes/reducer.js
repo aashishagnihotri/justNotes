@@ -184,6 +184,7 @@ const noteSlice = createSlice({
         } else {
           state.editNotesStatus = "success";
           toast.success(`${action.payload.data.message}`);
+          window.location.reload();
         }
       })
       .addCase(editNote.rejected, (state, action) => {
