@@ -3,8 +3,10 @@ import NoteModal from "../modal/modal";
 import AddIcon from "@mui/icons-material/Add";
 import styles from "./header.module.scss";
 import logo from "../../../public/svg/logo-no-background.svg";
-
+import { setLogout } from "../../redux/user/reducer";
+import { useDispatch } from "react-redux";
 const Header = ({ handleSearch }) => {
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -32,8 +34,7 @@ const Header = ({ handleSearch }) => {
             }}
             onClick={() => {
               alert("Logging Out...");
-              localStorage.removeItem("accessToken");
-              window.location.reload(true);
+              dispatch(setLogout(false));
             }}
           >
             Logout

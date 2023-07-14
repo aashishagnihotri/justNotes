@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { refreshPage } from "../../helpers/helper";
 
 export const loginAuth = createAsyncThunk(
   "user/authenticateUser",
@@ -70,8 +69,22 @@ const userSlice = createSlice({
     signUpStatus: "idle", //  "idle" | "loading" | "success" | "failed"
     loginError: null,
     signUpError: null,
+    loginStatus: false,
   },
-  reducers: {},
+  reducers: {
+    setLogout: (state, action) => {
+      console.log("dispatched: ", state, action);
+      return {
+        ...state,
+        userLoginStatus: "idle",
+        signUpStatus: "idle",
+        loginError: null,
+        signUpError: null,
+        user: {},
+        loginStatus: false,
+      };
+    },
+  },
 
   extraReducers(builder) {
     builder
@@ -88,7 +101,7 @@ const userSlice = createSlice({
           localStorage.setItem("userId", action.payload.data.userId);
           toast.success("Welcome!");
           state.userLoginStatus = "success";
-          refreshPage();
+          state.loginStatus = true;
         } else {
           state.userLoginStatus = "failed";
           toast.error(`${action.payload.data.message}`);
@@ -120,5 +133,8 @@ const userSlice = createSlice({
 });
 
 export const getSignUpStatus = (state) => state.user.signUpStatus;
+export const getLoginStatus = (state) => state.user.loginStatus;
+
+export const { logoutUser, setLogout } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -165,6 +165,7 @@ const noteSlice = createSlice({
         } else {
           state.addNotesStatus = "success";
           toast.success(`${action.payload.data.message}`);
+          window.location.reload();
         }
       })
       .addCase(addNote.rejected, (state, action) => {
